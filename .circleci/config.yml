@@ -24,6 +24,4 @@ workflows:
 
   test:
     jobs:
-      - test:
-          context: *context
-          filters: *testing_filter
+      - test
