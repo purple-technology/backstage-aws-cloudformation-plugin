@@ -70,7 +70,7 @@ cd packages/backend
 yarn add backstage-aws-cloudformation-plugin
 ```
 
-3. Add the `CloudFormationRegionProcessor` and `CloudFormationStackProcessor` processors your catalog builder:
+4. Add the `CloudFormationRegionProcessor` and `CloudFormationStackProcessor` processors your catalog builder:
 
 ```ts
 // In packages/backend/src/plugins/catalog.ts
@@ -97,7 +97,7 @@ export default async function createPlugin(
 	} = await builder.build();
 ```
 
-4. Optionaly add default profile configuration 
+5. Optionaly add default profile configuration 
 
 ```yaml
 # In app-config.yaml
@@ -106,7 +106,7 @@ integrations:
     profile: purple-technology
 ```
 
-5. Add Locations
+6. Add Locations
 
 ```yaml
 # In app-config.yaml
