@@ -6,7 +6,7 @@ Backstage plugin which pulls entities from AWS CloudFormation stacks metadata.
 
 ## Setup
 
-1. Setup AWS profile credentials on your machine
+1. **Setup AWS profile credentials on your machine**
 
 ```ini
 # ~/.aws/credentials
@@ -17,7 +17,7 @@ aws_secret_access_key=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 
 Learn more in AWS documentation [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html).
 
-2. Add Backstage notation to your CloudFormation template's Metadata section
+2. **Add Backstage notation to your CloudFormation template's Metadata section**
 
 *Make sure to put the notation to correct path: `Metadata.Backstage.Entities`.*
 <details>
@@ -62,7 +62,7 @@ Metadata:
 </details>
 
 
-3. If you have a standalone app (you didn't clone this repo), then do
+3. **If you have a standalone app (you didn't clone this repo), then do**
 
 ```bash
 # From your Backstage root directory
@@ -70,7 +70,7 @@ cd packages/backend
 yarn add backstage-aws-cloudformation-plugin
 ```
 
-4. Add the `CloudFormationRegionProcessor` and `CloudFormationStackProcessor` processors your catalog builder:
+4. **Add the `CloudFormationRegionProcessor` and `CloudFormationStackProcessor` processors your catalog builder**
 
 ```ts
 // In packages/backend/src/plugins/catalog.ts
@@ -97,7 +97,7 @@ export default async function createPlugin(
 	} = await builder.build();
 ```
 
-5. Optionaly add default profile configuration 
+5. **Optionaly add default profile configuration**
 
 ```yaml
 # In app-config.yaml
@@ -106,7 +106,7 @@ integrations:
     profile: purple-technology
 ```
 
-6. Add Locations
+6. **Add Locations**
 
 ```yaml
 # In app-config.yaml
@@ -133,7 +133,7 @@ catalog:
 Accepts as a `target` ARN of the CloudFormation stack and optionally also name of the profile separated by `@`.
 
 ```
-[profileName@]STACK_ARN
+[profileName@]stack_arn
 ```
 
 ### `aws:cloudformation:region`
