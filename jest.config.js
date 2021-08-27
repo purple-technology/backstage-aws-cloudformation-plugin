@@ -1,4 +1,10 @@
 module.exports = {
+	globals: {
+		__DEV__: true,
+		'ts-jest': {
+			tsconfig: 'tsconfig.test.json'
+		}
+	},
 	preset: 'ts-jest',
 	moduleFileExtensions: ['js', 'json', 'ts'],
 	roots: ['<rootDir>/src'],
@@ -6,7 +12,7 @@ module.exports = {
 		'^.+\\.tsx?$': 'ts-jest'
 	},
 	collectCoverage: true,
-	collectCoverageFrom: ['src/**/*.ts'],
+	collectCoverageFrom: ['src/**/*.ts', '!src/**/index.ts', '!src/testing/**/*.ts'],
 	coverageThreshold: {
 		global: {
 			branches: 100,

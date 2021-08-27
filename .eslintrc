@@ -3,7 +3,7 @@
   "plugins": ["@typescript-eslint", "prettier", "simple-import-sort"],
   "extends": ["plugin:prettier/recommended"],
   "rules": {
-    "@typescript-eslint/ban-ts-comment": [
+    	"@typescript-eslint/ban-ts-comment": [
 			"error",
 			{
 				"ts-expect-error": "allow-with-description",

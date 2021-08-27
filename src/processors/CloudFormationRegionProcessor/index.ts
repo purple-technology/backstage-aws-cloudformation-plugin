@@ -1,0 +1,1 @@
+export { CloudFormationRegionProcessor } from './CloudFormationRegionProcessor'
