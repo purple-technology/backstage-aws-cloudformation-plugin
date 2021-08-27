@@ -1,0 +1,12 @@
+.circleci
+.vscode
+src
+.editorconfig
+.eslintignore
+.eslintrc
+.gitignore
+.nvmrc
+.prettierignore
+.pretterrc
+jest.config.js
+tsconfig.json

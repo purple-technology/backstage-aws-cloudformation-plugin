@@ -1,0 +1,29 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: npm ci
+      - run:
+          name: Run Tests
+          command: npm run test
+      - run:
+          name: Run Linter
+          command: npm run lint
+      - run:
+          name: Run Build
+          command: npm run build
+
+workflows:
+  version: 2
+
+  test:
+    jobs:
+      - test:
+          context: *context
+          filters: *testing_filter
