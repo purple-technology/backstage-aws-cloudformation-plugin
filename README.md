@@ -21,8 +21,6 @@ Learn more in AWS documentation [here](https://docs.aws.amazon.com/cli/latest/us
 2. **Add Backstage notation to your CloudFormation template's Metadata section**
 
 *Make sure to put the notation to correct path: `Metadata.Backstage.Entities`.*
-<details>
-<summary>Click to show content of the template example</summary>
 
 ```yaml
 AWSTemplateFormatVersion: 2010-09-09
@@ -60,34 +58,31 @@ Metadata:
           definition:
             $text: 'https://petstore.swagger.io/v2/swagger.json'
 ```
-</details>
-
 
 3. **If you have a standalone app (you didn't clone this repo), then do**
 
 ```bash
 # From your Backstage root directory
-cd packages/backend
-yarn add backstage-aws-cloudformation-plugin
+$ cd packages/backend
+$ yarn add backstage-aws-cloudformation-plugin
 ```
 
 4. **Add the `CloudFormationRegionProcessor` and `CloudFormationStackProcessor` processors your catalog builder**
 
-```ts
+```diff
 // In packages/backend/src/plugins/catalog.ts
-import {
-	CloudFormationRegionProcessor,
-	CloudFormationStackProcessor,
-} from 'backstage-aws-cloudformation-plugin';
++import {
++	CloudFormationRegionProcessor,
++	CloudFormationStackProcessor,
++} from 'backstage-aws-cloudformation-plugin';
 
 export default async function createPlugin(
 	env: PluginEnvironment,
 ): Promise<Router> {
 	const builder = await CatalogBuilder.create(env);
 
-    // Here add the catalog processors
-	builder.addProcessor(new CloudFormationStackProcessor(env.config));
-	builder.addProcessor(new CloudFormationRegionProcessor(env.config));
++	builder.addProcessor(new CloudFormationStackProcessor(env.config));
++	builder.addProcessor(new CloudFormationRegionProcessor(env.config));
 
 	const {
 		entitiesCatalog,
