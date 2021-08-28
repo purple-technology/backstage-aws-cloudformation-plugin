@@ -1,6 +1,7 @@
 # 🧋 Backstage AWS CloudFormation Plugin 🧋
 
 [![CircleCI](https://circleci.com/gh/purple-technology/backstage-aws-cloudformation-plugin/tree/master.svg?style=svg)](https://circleci.com/gh/purple-technology/backstage-aws-cloudformation-plugin/tree/master)
+[![codecov](https://codecov.io/gh/purple-technology/backstage-aws-cloudformation-plugin/branch/master/graph/badge.svg?token=KKK1OH1MPI)](https://codecov.io/gh/purple-technology/backstage-aws-cloudformation-plugin)
 
 Backstage plugin which pulls entities from AWS CloudFormation stacks metadata.
 
