@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  codecov: codecov/codecov@3.0.0
+
 jobs:
   test:
     docker:
@@ -17,11 +20,12 @@ jobs:
           paths:
             - node_modules
       - run:
-          name: Run Tests
-          command: npm run test
-      - run:
           name: Run Linter
           command: npm run lint
+      - run:
+          name: Run Tests
+          command: npm run test
+      - codecov/upload
       - run:
           name: Run Build
           command: npm run build
