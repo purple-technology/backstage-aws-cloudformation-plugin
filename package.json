@@ -3,6 +3,9 @@
 	"version": "1.0.1",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
+	"engines": {
+		"node": ">= 12.4.0"
+	},
 	"scripts": {
 		"test": "jest --forceExit --detectOpenHandles",
 		"tdd": "npm run test -- --watch",
@@ -38,7 +41,8 @@
 		"*.{ts,js,json}": "eslint --fix"
 	},
 	"dependencies": {
-		"aws-sdk": "^2.977.0"
+		"aws-sdk": "^2.977.0",
+		"find-and-replace-anything": "^2.2.2"
 	},
 	"peerDependencies": {
 		"@backstage/catalog-model": "0.x",

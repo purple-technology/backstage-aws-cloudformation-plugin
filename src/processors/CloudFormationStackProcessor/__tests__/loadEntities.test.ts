@@ -1,7 +1,10 @@
 import AWS from 'aws-sdk'
 import * as AWSMock from 'aws-sdk-mock'
 
-import { createGetTemplateSummary } from '../../../testing/awsMocks'
+import {
+	createDescribeStacks,
+	createGetTemplateSummary
+} from '../../../testing/awsMocks'
 import { loadEntitiesFromCloudFormation } from '../loadEntities'
 
 describe('CloudFormationStackProcessor - loadEntities', () => {
@@ -21,7 +24,10 @@ describe('CloudFormationStackProcessor - loadEntities', () => {
 					Metadata: JSON.stringify({
 						Backstage: {
 							Entities: {
-								someField: 'someValue'
+								someField:
+									'https://${Region}.console.aws.amazon.com/lambda/home?region=${Region}#/functions/${Outputs.MyLambdaFunctionName}?tab=code',
+								noReplacementHere:
+									'hello\\${Region}hello${Outputs.NotFound}hi${someRandomString}'
 							}
 						}
 					})
@@ -31,16 +37,49 @@ describe('CloudFormationStackProcessor - loadEntities', () => {
 			getTemplateSummaryResponses
 		)
 
+		const describeStacksResponses: AWS.CloudFormation.Types.DescribeStacksOutput[] =
+			[
+				{
+					Stacks: [
+						{
+							StackName: 'some-stack',
+							CreationTime: new Date(),
+							StackStatus: 'CREATE_COMPLETE',
+							Outputs: [
+								{
+									OutputKey: 'MyLambdaFunctionName',
+									OutputValue: 'my-super-function-name-here'
+								},
+								{}
+							]
+						}
+					]
+				}
+			]
+		const describeStacksSpy = createDescribeStacks(describeStacksResponses)
+
 		expect(
 			await loadEntitiesFromCloudFormation({
 				arn: 'arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123',
 				profile: 'someProfile',
 				region: 'ap-southeast-1'
 			})
-		).toEqual({ someField: 'someValue' })
+		).toEqual({
+			someField:
+				'https://ap-southeast-1.console.aws.amazon.com/lambda/home?region=ap-southeast-1#/functions/my-super-function-name-here?tab=code',
+			noReplacementHere:
+				'hello\\${Region}hello${Outputs.NotFound}hi${someRandomString}'
+		})
 
 		expect(getTemplateSummarySpy).toHaveBeenCalledWith<
 			[AWS.CloudFormation.Types.GetTemplateSummaryInput]
+		>({
+			StackName:
+				'arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123'
+		})
+
+		expect(describeStacksSpy).toHaveBeenCalledWith<
+			[AWS.CloudFormation.Types.DescribeStacksInput]
 		>({
 			StackName:
 				'arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123'
@@ -54,6 +93,20 @@ describe('CloudFormationStackProcessor - loadEntities', () => {
 			getTemplateSummaryResponses
 		)
 
+		const describeStacksResponses: AWS.CloudFormation.Types.DescribeStacksOutput[] =
+			[
+				{
+					Stacks: [
+						{
+							StackName: 'some-stack',
+							CreationTime: new Date(),
+							StackStatus: 'CREATE_COMPLETE'
+						}
+					]
+				}
+			]
+		const describeStacksSpy = createDescribeStacks(describeStacksResponses)
+
 		expect(
 			await loadEntitiesFromCloudFormation({
 				arn: 'arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123',
@@ -64,6 +117,13 @@ describe('CloudFormationStackProcessor - loadEntities', () => {
 
 		expect(getTemplateSummarySpy).toHaveBeenCalledWith<
 			[AWS.CloudFormation.Types.GetTemplateSummaryInput]
+		>({
+			StackName:
+				'arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123'
+		})
+
+		expect(describeStacksSpy).toHaveBeenCalledWith<
+			[AWS.CloudFormation.Types.DescribeStacksInput]
 		>({
 			StackName:
 				'arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123'
@@ -81,6 +141,20 @@ describe('CloudFormationStackProcessor - loadEntities', () => {
 			getTemplateSummaryResponses
 		)
 
+		const describeStacksResponses: AWS.CloudFormation.Types.DescribeStacksOutput[] =
+			[
+				{
+					Stacks: [
+						{
+							StackName: 'some-stack',
+							CreationTime: new Date(),
+							StackStatus: 'CREATE_COMPLETE'
+						}
+					]
+				}
+			]
+		const describeStacksSpy = createDescribeStacks(describeStacksResponses)
+
 		expect(
 			await loadEntitiesFromCloudFormation({
 				arn: 'arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123',
@@ -91,6 +165,13 @@ describe('CloudFormationStackProcessor - loadEntities', () => {
 
 		expect(getTemplateSummarySpy).toHaveBeenCalledWith<
 			[AWS.CloudFormation.Types.GetTemplateSummaryInput]
+		>({
+			StackName:
+				'arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123'
+		})
+
+		expect(describeStacksSpy).toHaveBeenCalledWith<
+			[AWS.CloudFormation.Types.DescribeStacksInput]
 		>({
 			StackName:
 				'arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123'
@@ -120,6 +201,46 @@ describe('CloudFormationStackProcessor - loadEntities', () => {
 
 		expect(getTemplateSummarySpy).toHaveBeenCalledWith<
 			[AWS.CloudFormation.Types.GetTemplateSummaryInput]
+		>({
+			StackName:
+				'arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123'
+		})
+	})
+
+	it('should trow error because of empty stacks result', async () => {
+		const getTemplateSummaryResponses: AWS.CloudFormation.Types.GetTemplateSummaryOutput[] =
+			[{}]
+		const getTemplateSummarySpy = createGetTemplateSummary(
+			getTemplateSummaryResponses
+		)
+
+		const describeStacksResponses: AWS.CloudFormation.Types.DescribeStacksOutput[] =
+			[
+				{
+					Stacks: []
+				}
+			]
+		const describeStacksSpy = createDescribeStacks(describeStacksResponses)
+
+		await expect(
+			loadEntitiesFromCloudFormation({
+				arn: 'arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123',
+				profile: 'someProfile',
+				region: 'ap-southeast-1'
+			})
+		).rejects.toThrowError(
+			'Stack "arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123" not found.'
+		)
+
+		expect(getTemplateSummarySpy).toHaveBeenCalledWith<
+			[AWS.CloudFormation.Types.GetTemplateSummaryInput]
+		>({
+			StackName:
+				'arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123'
+		})
+
+		expect(describeStacksSpy).toHaveBeenCalledWith<
+			[AWS.CloudFormation.Types.DescribeStacksInput]
 		>({
 			StackName:
 				'arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123'

@@ -1,13 +1,40 @@
 import { Entity } from '@backstage/catalog-model'
-import { AWSError, CloudFormation, SharedIniFileCredentials } from 'aws-sdk'
+import { CloudFormation, SharedIniFileCredentials } from 'aws-sdk'
+import { findAndReplaceIf } from 'find-and-replace-anything'
 
+import { awsFetch } from '../../utils/awsFetch'
 import { CloudFormationTarget } from './types'
 
-const isAWSError = (error: unknown): error is AWSError =>
-	typeof error === 'object' &&
-	error !== null &&
-	'code' in error &&
-	'retryable' in error
+/*
+	Regexp will match for example:
+		${Region}
+		${Outputs.SomeStackOutput}
+	
+	But it can be escaped:
+		\${Region} won't result in a match
+*/
+const replaceVariables = (
+	value: string,
+	outputs: Record<string, string>,
+	target: CloudFormationTarget
+): string =>
+	Array.from(value.matchAll(/(?<!\\)\${((.(?!\$))*)}/g)).reduce(
+		(val, match) => {
+			const variableExpression = match[0]
+			const variableName = match[1]
+
+			if (variableName.startsWith('Outputs.')) {
+				const outputName = variableName.replace('Outputs.', '')
+				if (outputName in outputs) {
+					return val.replace(variableExpression, outputs[outputName])
+				}
+			} else if (variableName === 'Region') {
+				return val.replace(variableExpression, target.region)
+			}
+			return val
+		},
+		value
+	)
 
 export const loadEntitiesFromCloudFormation = async (
 	target: CloudFormationTarget
@@ -19,32 +46,48 @@ export const loadEntitiesFromCloudFormation = async (
 		region: target.region
 	})
 
-	const load = async (): Promise<Entity[]> => {
-		try {
-			const template = await cloudFormation
-				.getTemplateSummary({ StackName: target.arn })
-				.promise()
+	// Load template - Metadata
+	const template = await awsFetch(async () =>
+		cloudFormation.getTemplateSummary({ StackName: target.arn }).promise()
+	)
+	const metadata = JSON.parse(template.Metadata ?? '{}')
+	const rawEntities: Entity[] = metadata?.Backstage?.Entities ?? []
 
-			const metadata = JSON.parse(template.Metadata ?? '{}')
-			const entities: Entity[] = metadata?.Backstage?.Entities ?? []
+	// Load stack info - Outputs
+	const stacks = (
+		await awsFetch(async () =>
+			cloudFormation.describeStacks({ StackName: target.arn }).promise()
+		)
+	).Stacks
 
-			return entities
-		} catch (err) {
-			if (
-				isAWSError(err) &&
-				err.code === 'Throttling' &&
-				err.retryable === true
-			) {
-				return new Promise((resolve) => {
-					setTimeout(
-						() => resolve(load()),
-						Math.random() * 3000 + 2000 // 2 to 5 seconds cooldown
-					)
-				})
-			}
-			throw err
-		}
+	if (typeof stacks === 'undefined' || stacks.length === 0) {
+		throw new Error(`Stack "${target.arn}" not found.`)
 	}
 
-	return load()
+	const outputs = (stacks[0].Outputs ?? []).reduce<Record<string, string>>(
+		(acc, { OutputKey, OutputValue }) => {
+			if (
+				typeof OutputKey !== 'undefined' &&
+				typeof OutputValue !== 'undefined'
+			) {
+				acc[OutputKey] = OutputValue
+			}
+			return acc
+		},
+		{}
+	)
+
+	const processedEntities = findAndReplaceIf(
+		rawEntities,
+		(value) => {
+			if (typeof value !== 'string') {
+				return value
+			}
+
+			return replaceVariables(value, outputs, target)
+		},
+		{ checkArrayValues: true }
+	)
+
+	return processedEntities
 }

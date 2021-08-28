@@ -42,3 +42,8 @@ export const createGetTemplateSummary = createMockCreator<
 	AWS.CloudFormation.Types.GetTemplateSummaryInput,
 	AWS.CloudFormation.Types.GetTemplateSummaryOutput
 >('getTemplateSummary')
+
+export const createDescribeStacks = createMockCreator<
+	AWS.CloudFormation.Types.DescribeStacksInput,
+	AWS.CloudFormation.Types.DescribeStacksOutput
+>('describeStacks')
