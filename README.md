@@ -5,6 +5,13 @@
 
 Backstage plugin which pulls entities from AWS CloudFormation stacks metadata.
 
+## Features
+
+- Pull arbitrary number of Backstage entities from CloudFormation stack's Metadata
+- Scan whole CloudFormation region
+- Use multiple AWS profiles/accounts
+- Use variables inside the entities - reference CloudFormation Stack Outputs or Region
+
 ## Setup
 
 1. **Setup AWS profile credentials on your machine**
@@ -140,11 +147,26 @@ Accepts as a `target` ID of the AWS region and optionally also name of the profi
 [profileName@]region-name-1
 ```
 
-## Features
+## Variables
 
-- Pull arbitrary number of Backstage entities from CloudFormation stack's Metadata
-- Scan whole CloudFormation region
-- Use multiple AWS profiles/accounts
+Since it's not possible to use [intrinsic functions](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference.html) (`Ref`, `Fn::GetAtt`, etc.) inside `Metadata`, we've solved it via custom variables syntax.
+
+When the entities are loaded from the `Metadata`, any variables inside are processed and replaced with appropriate values - if found.
+
+### Escaping
+You can escape the variable expression via `\`.
+
+For example this variable won't get replaced:
+```
+\${Outputs.SomeVariable}
+```
+
+### Overview
+
+| Type    | Example Input                                    | Example Output                                  | Description                           |
+|---------|--------------------------------------------------|-------------------------------------------------|---------------------------------------|
+| Region  | `description: "Service in ${Region} region"`     | `description: "Service in eu-central-1 region"` | Provides region of the stack.         |
+| Outputs | `name: "lambda-${Outputs.GetClientsLambdaName}"` | `name: "lambda-get-clients-prod"`               | Provides [`Output`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/outputs-section-structure.html) value from the stack. |
 
 ## Limitations
 
