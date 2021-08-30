@@ -1,6 +1,11 @@
 {
 	"name": "backstage-aws-cloudformation-plugin",
-	"version": "1.1.1",
+	"version": "1.1.2",
+	"contributors": [
+		"Filip Pyrek <PyrekFilip@gmail.com> (https://filip.pyrek.cz)"
+	],
+	"description": "Backstage plugin for using AWS CloudFormation as source location",
+	"license": "MIT",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"engines": {
@@ -48,5 +53,22 @@
 		"@backstage/catalog-model": "0.x",
 		"@backstage/config": "0.x",
 		"@backstage/plugin-catalog-backend": "0.x"
-	}
+	},
+	"homepage": "https://github.com/purple-technology/backstage-aws-cloudformation-plugin#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/purple-technology/backstage-aws-cloudformation-plugin.git"
+	},
+	"bugs": {
+		"url": "https://github.com/purple-technology/backstage-aws-cloudformation-plugin/issues"
+	},
+	"keywords": [
+		"backstage",
+		"aws",
+		"cloudformation",
+		"serverless"
+	],
+	"files": [
+		"dist"
+	]
 }
