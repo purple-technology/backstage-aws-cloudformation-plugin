@@ -2,6 +2,7 @@
 .editorconfig
 .eslintignore
 .eslintrc
+.github
 .gitignore
 .husky
 .nvmrc
