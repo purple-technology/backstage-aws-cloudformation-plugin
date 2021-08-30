@@ -1,0 +1,20 @@
+{
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"files.associations": {
+		"*.env": "ini"
+	},
+	"editor.defaultFormatter": "dbaeumer.vscode-eslint",
+	"eslint.format.enable": true,
+	"editor.formatOnSave": true,
+	"prettier.ignorePath": ".eslintignore",
+	"prettier.useEditorConfig": true,
+	"editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+	},
+	"typescript.tsdk": "node_modules/typescript/lib"
+}
