@@ -15,8 +15,15 @@ import { CloudFormationTarget } from './types'
 */
 const replaceVariables = (
 	value: string,
-	outputs: Record<string, string>,
-	target: CloudFormationTarget
+	{
+		target,
+		outputs,
+		stackName
+	}: {
+		target: CloudFormationTarget
+		outputs: Record<string, string>
+		stackName: string
+	}
 ): string =>
 	Array.from(value.matchAll(/(?<!\\)\${((.(?!\$))*)}/g)).reduce(
 		(val, match) => {
@@ -30,6 +37,10 @@ const replaceVariables = (
 				}
 			} else if (variableName === 'Region') {
 				return val.replace(variableExpression, target.region)
+			} else if (variableName === 'StackId') {
+				return val.replace(variableExpression, target.arn)
+			} else if (variableName === 'StackName') {
+				return val.replace(variableExpression, stackName)
 			}
 			return val
 		},
@@ -84,7 +95,11 @@ export const loadEntitiesFromCloudFormation = async (
 				return value
 			}
 
-			return replaceVariables(value, outputs, target)
+			return replaceVariables(value, {
+				target,
+				outputs,
+				stackName: stacks[0].StackName
+			})
 		},
 		{ checkArrayValues: true }
 	)

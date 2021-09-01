@@ -163,10 +163,12 @@ For example this variable won't get replaced:
 
 ### Overview
 
-| Type    | Example Input                                    | Example Output                                  | Description                           |
-|---------|--------------------------------------------------|-------------------------------------------------|---------------------------------------|
-| Region  | `description: "Service in ${Region} region"`     | `description: "Service in eu-central-1 region"` | Provides region of the stack.         |
-| Outputs | `name: "lambda-${Outputs.GetClientsLambdaName}"` | `name: "lambda-get-clients-prod"`               | Provides [`Output`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/outputs-section-structure.html) value from the stack. |
+| Type      | Example Input                                    | Example Output                                  | Description                           |
+|-----------|--------------------------------------------------|-------------------------------------------------|---------------------------------------|
+| Region    | `description: "Service in ${Region} region"`     | `description: "Service in eu-central-1 region"` | Provides region of the stack.         |
+| StackId   | `title: Stack ARN is ${StackId}`                 | `title: Stack ARN is arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123` | Provides stack ID (ARN). |
+| StackName | `title: Stack Name is ${StackName}`              | `title: Stack Name is some-stack`               | Provides stack name.                  |
+| Outputs   | `name: "lambda-${Outputs.GetClientsLambdaName}"` | `name: "lambda-get-clients-prod"`               | Provides [`Output`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/outputs-section-structure.html) value from the stack. |
 
 ## Limitations
 
