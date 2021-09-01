@@ -27,7 +27,9 @@ describe('CloudFormationStackProcessor - loadEntities', () => {
 								someField:
 									'https://${Region}.console.aws.amazon.com/lambda/home?region=${Region}#/functions/${Outputs.MyLambdaFunctionName}?tab=code',
 								noReplacementHere:
-									'hello\\${Region}hello${Outputs.NotFound}hi${someRandomString}'
+									'hello\\${Region}hello${Outputs.NotFound}hi${someRandomString}',
+								stackId: 'stack-id-here:${StackId}----',
+								stackName: 'stack-name-here:${StackName}----'
 							}
 						}
 					})
@@ -68,7 +70,10 @@ describe('CloudFormationStackProcessor - loadEntities', () => {
 			someField:
 				'https://ap-southeast-1.console.aws.amazon.com/lambda/home?region=ap-southeast-1#/functions/my-super-function-name-here?tab=code',
 			noReplacementHere:
-				'hello\\${Region}hello${Outputs.NotFound}hi${someRandomString}'
+				'hello\\${Region}hello${Outputs.NotFound}hi${someRandomString}',
+			stackId:
+				'stack-id-here:arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123----',
+			stackName: 'stack-name-here:some-stack----'
 		})
 
 		expect(getTemplateSummarySpy).toHaveBeenCalledWith<
