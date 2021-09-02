@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/purple-technology/backstage-aws-cloudformation-plugin/compare/v1.3.0...v1.4.0) (2021-09-02)
+
+
+### Features
+
+* add account id variable ([4cb6b91](https://github.com/purple-technology/backstage-aws-cloudformation-plugin/commit/4cb6b91a6f774a93cccdc310e1d4cd1c8a7a2942))
+
+
+### Bug Fixes
+
+* regex macthing aws account id in arn ([a67f0a0](https://github.com/purple-technology/backstage-aws-cloudformation-plugin/commit/a67f0a0dfaa0199090ba45657dbe90c146191689))
+
 ## [1.3.0](https://github.com/purple-technology/backstage-aws-cloudformation-plugin/compare/v1.2.0...v1.3.0) (2021-09-02)
 
 
