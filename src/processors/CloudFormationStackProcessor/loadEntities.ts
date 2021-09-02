@@ -25,7 +25,7 @@ const replaceVariables = (
 		stackName: string
 	}
 ): string =>
-	Array.from(value.matchAll(/(?<!\\)\${((.(?!\$))*)}/g)).reduce(
+	Array.from(value.matchAll(/(?<!\\)\${((.(?!\$)(?!\{))*)}/g)).reduce(
 		(val, match) => {
 			const variableExpression = match[0]
 			const variableName = match[1]
