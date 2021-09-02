@@ -41,6 +41,11 @@ const replaceVariables = (
 				return val.replace(variableExpression, target.arn)
 			} else if (variableName === 'StackName') {
 				return val.replace(variableExpression, stackName)
+			} else if (variableName === 'AccountId') {
+				return val.replace(
+					variableExpression,
+					(target.arn.match(/:([0-9]{12}):/) ?? [])[1]
+				)
 			}
 			return val
 		},

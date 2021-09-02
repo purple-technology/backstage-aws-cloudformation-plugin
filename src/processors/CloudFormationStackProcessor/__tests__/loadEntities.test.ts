@@ -29,7 +29,7 @@ describe('CloudFormationStackProcessor - loadEntities', () => {
 								noReplacementHere:
 									'hello\\${Region}hello${Outputs.NotFound}hi${someRandomString}',
 								stackId: 'stack-id-here:${StackId}----',
-								stackName: 'stack-name-here:${StackName}----'
+								stackName: 'stack-name-here:${StackName}----${AccountId}'
 							}
 						}
 					})
@@ -73,7 +73,7 @@ describe('CloudFormationStackProcessor - loadEntities', () => {
 				'hello\\${Region}hello${Outputs.NotFound}hi${someRandomString}',
 			stackId:
 				'stack-id-here:arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123----',
-			stackName: 'stack-name-here:some-stack----'
+			stackName: 'stack-name-here:some-stack----123456789000'
 		})
 
 		expect(getTemplateSummarySpy).toHaveBeenCalledWith<
@@ -249,6 +249,62 @@ describe('CloudFormationStackProcessor - loadEntities', () => {
 		>({
 			StackName:
 				'arn:aws:cloudformation:ap-southeast-1:123456789000:stack/some-stack/123-345-12-1235-123123'
+		})
+	})
+
+	it('should return undefined for not-matching AWS account ID variable', async () => {
+		const getTemplateSummaryResponses: AWS.CloudFormation.Types.GetTemplateSummaryOutput[] =
+			[
+				{
+					Metadata: JSON.stringify({
+						Backstage: {
+							Entities: {
+								accountId: '--${AccountId}--'
+							}
+						}
+					})
+				}
+			]
+		const getTemplateSummarySpy = createGetTemplateSummary(
+			getTemplateSummaryResponses
+		)
+
+		const describeStacksResponses: AWS.CloudFormation.Types.DescribeStacksOutput[] =
+			[
+				{
+					Stacks: [
+						{
+							StackName: 'some-stack',
+							CreationTime: new Date(),
+							StackStatus: 'CREATE_COMPLETE'
+						}
+					]
+				}
+			]
+		const describeStacksSpy = createDescribeStacks(describeStacksResponses)
+
+		expect(
+			await loadEntitiesFromCloudFormation({
+				arn: 'arn:aws:cloudformation:ap-southeast-1:asdadsasd:stack/some-stack/123-345-12-1235-123123',
+				profile: 'someProfile',
+				region: 'ap-southeast-1'
+			})
+		).toEqual({
+			accountId: '--undefined--'
+		})
+
+		expect(getTemplateSummarySpy).toHaveBeenCalledWith<
+			[AWS.CloudFormation.Types.GetTemplateSummaryInput]
+		>({
+			StackName:
+				'arn:aws:cloudformation:ap-southeast-1:asdadsasd:stack/some-stack/123-345-12-1235-123123'
+		})
+
+		expect(describeStacksSpy).toHaveBeenCalledWith<
+			[AWS.CloudFormation.Types.DescribeStacksInput]
+		>({
+			StackName:
+				'arn:aws:cloudformation:ap-southeast-1:asdadsasd:stack/some-stack/123-345-12-1235-123123'
 		})
 	})
 })
