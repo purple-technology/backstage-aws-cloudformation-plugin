@@ -23,7 +23,7 @@
 	"devDependencies": {
 		"@backstage/catalog-model": "^0.9.0",
 		"@backstage/config": "^0.1.8",
-		"@backstage/plugin-catalog-backend": "^0.13.5",
+		"@backstage/plugin-catalog-backend": "^0.14.0",
 		"@commitlint/cli": "^13.1.0",
 		"@commitlint/config-conventional": "^13.1.0",
 		"@types/jest": "^27.0.1",
