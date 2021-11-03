@@ -25,7 +25,7 @@
 		"@backstage/config": "^0.1.8",
 		"@backstage/plugin-catalog-backend": "^0.13.5",
 		"@commitlint/cli": "^13.1.0",
-		"@commitlint/config-conventional": "^13.1.0",
+		"@commitlint/config-conventional": "^14.1.0",
 		"@types/jest": "^27.0.1",
 		"@types/node": "^14.14.31",
 		"@typescript-eslint/eslint-plugin": "^4.29.3",
