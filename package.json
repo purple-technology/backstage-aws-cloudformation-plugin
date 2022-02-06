@@ -47,7 +47,7 @@
 	},
 	"dependencies": {
 		"aws-sdk": "^2.977.0",
-		"find-and-replace-anything": "^2.2.2"
+		"find-and-replace-anything": "^3.0.0"
 	},
 	"peerDependencies": {
 		"@backstage/catalog-model": "0.x",
