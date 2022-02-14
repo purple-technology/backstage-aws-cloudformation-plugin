@@ -1,6 +1,6 @@
 {
 	"name": "backstage-aws-cloudformation-plugin",
-	"version": "1.4.3",
+	"version": "1.4.4",
 	"contributors": [
 		"Filip Pyrek <PyrekFilip@gmail.com> (https://filip.pyrek.cz)"
 	],
