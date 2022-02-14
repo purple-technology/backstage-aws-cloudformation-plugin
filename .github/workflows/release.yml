@@ -1,0 +1,44 @@
+name: release
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch: {}
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set git identity
+        run: |-
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+      - name: Check whether it's the latest commit
+        run:  if [[ $(git ls-remote origin -h ${{ github.ref }} | cut -f1) != ${{ github.sha }} ]]; then exit 1; fi
+      - name: Setup Node.js
+        uses: actions/setup-node@v2.2.0
+        with:
+          node-version: 14
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Run standard-version
+        run: npm run release
+      - name: Push new changelog to git
+        run: git push --follow-tags
+      - name: Release to GitHub releases
+        run: errout=$(mktemp); gh release create $(cat  package.json | jq -r .version) -R $GITHUB_REPOSITORY -F CHANGELOG.md -t $(cat  package.json | jq -r .version) --target $GITHUB_REF 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF: ${{ github.ref }}
+      - name: Setup NPM registry
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      - name: Release to NPM
+        run: npm publish --access public
