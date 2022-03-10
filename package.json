@@ -20,9 +20,9 @@
 		"release": "standard-version"
 	},
 	"devDependencies": {
-		"@backstage/catalog-model": "^0.10.0",
+		"@backstage/catalog-model": "^0.13.0",
 		"@backstage/config": "^0.1.8",
-		"@backstage/plugin-catalog-backend": "^0.21.0",
+		"@backstage/plugin-catalog-backend": "^0.24.0",
 		"@commitlint/cli": "^16.0.0",
 		"@commitlint/config-conventional": "^16.0.0",
 		"@types/jest": "^27.0.1",
