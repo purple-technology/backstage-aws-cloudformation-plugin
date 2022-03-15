@@ -40,6 +40,10 @@ describe('CloudFormationRegionProcessor - CloudFormationRegionProcessor', () => 
 
 		const emitSpy = jest.fn<void, [CatalogProcessorResult]>()
 
+		expect(processor.getProcessorName()).toEqual(
+			'CloudFormationRegionProcessor'
+		)
+
 		expect(
 			await processor.readLocation(
 				{
@@ -63,7 +67,6 @@ describe('CloudFormationRegionProcessor - CloudFormationRegionProcessor', () => 
 				target: 'otherProfile@otherProfile@some-stack-id-1',
 				type: 'aws:cloudformation:stack'
 			},
-			optional: false,
 			type: 'location'
 		})
 		expect(emitSpy).toHaveBeenNthCalledWith<[CatalogProcessorResult]>(2, {
@@ -71,7 +74,6 @@ describe('CloudFormationRegionProcessor - CloudFormationRegionProcessor', () => 
 				target: 'otherProfile@otherProfile@some-stack-id-2',
 				type: 'aws:cloudformation:stack'
 			},
-			optional: false,
 			type: 'location'
 		})
 		expect(emitSpy).toHaveBeenNthCalledWith<[CatalogProcessorResult]>(3, {
@@ -79,7 +81,6 @@ describe('CloudFormationRegionProcessor - CloudFormationRegionProcessor', () => 
 				target: 'otherProfile@otherProfile@some-stack-id-3',
 				type: 'aws:cloudformation:stack'
 			},
-			optional: false,
 			type: 'location'
 		})
 	})

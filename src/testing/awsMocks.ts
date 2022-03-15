@@ -11,7 +11,7 @@ const createMockCreator =
 		let counter = 0
 		AWSMock.mock(
 			'CloudFormation',
-			method,
+			method as keyof AWS.CloudFormation,
 			(
 				params: Input,
 				callback: (

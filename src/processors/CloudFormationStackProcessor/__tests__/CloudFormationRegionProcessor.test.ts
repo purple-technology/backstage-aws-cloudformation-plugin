@@ -47,6 +47,8 @@ describe('CloudFormationStackProcessor - CloudFormationRegionProcessor', () => {
 
 		const emitSpy = jest.fn<void, [CatalogProcessorResult]>()
 
+		expect(processor.getProcessorName()).toEqual('CloudFormationStackProcessor')
+
 		expect(
 			await processor.readLocation(
 				{

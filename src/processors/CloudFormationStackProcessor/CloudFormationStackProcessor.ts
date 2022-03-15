@@ -1,5 +1,5 @@
-import { LocationSpec } from '@backstage/catalog-model'
 import { Config } from '@backstage/config'
+import { LocationSpec } from '@backstage/plugin-catalog-backend'
 import {
 	CatalogProcessor,
 	CatalogProcessorEmit,
@@ -18,6 +18,10 @@ export class CloudFormationStackProcessor
 {
 	constructor(config: Config) {
 		super(config)
+	}
+
+	getProcessorName(): string {
+		return 'CloudFormationStackProcessor'
 	}
 
 	async readLocation(
