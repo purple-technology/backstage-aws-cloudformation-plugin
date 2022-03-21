@@ -3,7 +3,7 @@ import { LocationSpec } from '@backstage/plugin-catalog-backend'
 import {
 	CatalogProcessor,
 	CatalogProcessorEmit,
-	results
+	processingResult
 } from '@backstage/plugin-catalog-backend'
 
 import { CloudFormationProcessor } from '../CloudFormationProcessor'
@@ -45,10 +45,12 @@ export class CloudFormationStackProcessor
 				region,
 				profile
 			})
-			entities.forEach((entity) => emit(results.entity(location, entity)))
+			entities.forEach((entity) =>
+				emit(processingResult.entity(location, entity))
+			)
 		} catch (e) {
 			const message = `${location.type} ${location.target} could not be read, ${e}`
-			emit(results.generalError(location, message))
+			emit(processingResult.generalError(location, message))
 		}
 
 		return true

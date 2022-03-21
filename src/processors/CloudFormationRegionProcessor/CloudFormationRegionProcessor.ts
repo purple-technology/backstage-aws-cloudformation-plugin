@@ -3,7 +3,7 @@ import { LocationSpec } from '@backstage/plugin-catalog-backend'
 import {
 	CatalogProcessor,
 	CatalogProcessorEmit,
-	results
+	processingResult
 } from '@backstage/plugin-catalog-backend'
 
 import { CloudFormationProcessor } from '../CloudFormationProcessor'
@@ -48,18 +48,15 @@ export class CloudFormationRegionProcessor
 				profile
 			})) {
 				emit(
-					results.location(
-						{
-							target: `${profile}@${stackId}`,
-							type: STACK_LOCATION_TYPE
-						},
-						false
-					)
+					processingResult.location({
+						target: `${profile}@${stackId}`,
+						type: STACK_LOCATION_TYPE
+					})
 				)
 			}
 		} catch (e) {
 			const message = `${location.type} ${location.target} could not be read, ${e}`
-			emit(results.generalError(location, message))
+			emit(processingResult.generalError(location, message))
 		}
 
 		return true

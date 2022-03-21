@@ -20,9 +20,9 @@
 		"release": "standard-version"
 	},
 	"devDependencies": {
-		"@backstage/catalog-model": "^0.13.0",
-		"@backstage/config": "^0.1.15",
-		"@backstage/plugin-catalog-backend": "^0.24.0",
+		"@backstage/catalog-model": "^1.0.0",
+		"@backstage/config": "^1.0.0",
+		"@backstage/plugin-catalog-backend": "^1.0.0",
 		"@commitlint/cli": "^16.2.1",
 		"@commitlint/config-conventional": "^16.2.1",
 		"@types/jest": "^27.4.1",
@@ -49,9 +49,9 @@
 		"find-and-replace-anything": "^2.2.2"
 	},
 	"peerDependencies": {
-		"@backstage/catalog-model": "0.x",
-		"@backstage/config": "0.x",
-		"@backstage/plugin-catalog-backend": "0.x"
+		"@backstage/catalog-model": "1.x",
+		"@backstage/config": "1.x",
+		"@backstage/plugin-catalog-backend": "1.x"
 	},
 	"homepage": "https://github.com/purple-technology/backstage-aws-cloudformation-plugin#readme",
 	"repository": {
