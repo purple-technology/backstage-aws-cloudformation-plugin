@@ -100,7 +100,20 @@ export default async function createPlugin(
 	} = await builder.build();
 ```
 
-5. **Optionaly add default profile configuration**
+5. **Run Backstage with AWS_SDK_LOAD_CONFIG**
+
+In order for AWS SDK inside the plugin to work with AWS profile configuration in `~/.aws/config`, make sure to start backstage with `AWS_SDK_LOAD_CONFIG=true` environment variable.
+
+```json
+...
+"scripts": {
+  "dev": "AWS_SDK_LOAD_CONFIG=true concurrently \"yarn start\" \"yarn start-backend\"",
+  "start": "AWS_SDK_LOAD_CONFIG=true yarn workspace app start",
+  "start-backend": "AWS_SDK_LOAD_CONFIG=true yarn workspace backend start",
+...
+```
+
+6. **Optionaly add default profile configuration**
 
 ```yaml
 # In app-config.yaml
@@ -109,7 +122,7 @@ integrations:
     profile: purple-technology
 ```
 
-6. **Add Locations**
+7. **Add Locations**
 
 ```yaml
 # In app-config.yaml
