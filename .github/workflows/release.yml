@@ -21,7 +21,7 @@ jobs:
       - name: Check whether it's the latest commit
         run:  if [[ $(git ls-remote origin -h ${{ github.ref }} | cut -f1) != ${{ github.sha }} ]]; then exit 1; fi
       - name: Setup Node.js
-        uses: actions/setup-node@v3.7.0
+        uses: actions/setup-node@v3.8.1
         with:
           node-version: 14
       - name: Install dependencies
